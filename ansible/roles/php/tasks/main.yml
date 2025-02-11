@@ -1,0 +1,26 @@
+---
+- name: PHP | Install software properties common
+  apt: name=software-properties-common state=present
+
+- name: PHP | Ajouter le dépôt PPA Ondřej PHP
+  apt_repository: repo='ppa:ondrej/php' state=present
+
+- name: PHP | Update apt package list
+  apt: update_cache=yes
+
+- name: PHP | Installation de PHP
+  apt: name={{ item }} state=present
+  with_items:
+    - "php{{ php_version }}"
+    - "php{{ php_version }}-common"
+    - "php{{ php_version }}-cli"
+    - "php{{ php_version }}-xml"
+    - "php{{ php_version }}-intl"
+    - "php{{ php_version }}-curl"
+    - "php{{ php_version }}-cgi"
+    - "php{{ php_version }}-fpm"
+    - "php{{ php_version }}-mcrypt"
+    - "php{{ php_version }}-mysql"
+    - "php{{ php_version }}-gd"
+  notify: php restart
+...

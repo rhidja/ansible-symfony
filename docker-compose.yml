@@ -1,0 +1,12 @@
+version: '3'
+services:
+    web_server:
+        container_name: 'web_server'
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        ports:
+            - 2222:22
+            - 8080:80
+        volumes:
+            - ./app:/srv/app:rw,cached

@@ -1,0 +1,7 @@
+---
+db_host: "localhost"
+db_name: "app"
+db_user: "app"
+db_pass: "app_password"
+mysql_root_password: "root_password" # "{{ vault_mysql_root_password }}"  # Use Ansible Vault for sensitive data
+...

@@ -1,0 +1,56 @@
+---
+- name: MySQL | Installing Mysql  and dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - mysql-server-8.0
+    - python3-mysqldb
+
+- name: MySQL | Start mysql service
+  systemd:
+    name: mysql
+    state: started
+    enabled: true
+
+- name: MySQL | Create app database "{{ db_name }}"
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+
+- name: MySQl | Set root password
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: root
+    host: "%"
+    password: "{{ mysql_root_password }}"
+
+- name: MySQl | Create app user
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    priv: "{{ db_name }}.*: ALL"
+    host: "{{ db_host }}"
+    state: present
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_host: "{{ db_host }}"
+
+- name: MySQL | Remove anonymous user account for localhost
+  mysql_user:
+    name: ''
+    host: localhost
+    state: absent
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_host: "{{ db_host }}"
+
+- name: MySQL | Remove test database
+  mysql_db:
+    db: test
+    state: absent
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_host: "{{ db_host }}"

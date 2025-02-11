@@ -1,0 +1,13 @@
+---
+-   name: Installer un serveur web pour un projet Symfony
+    hosts: web
+    become: yes
+    vars_files:
+        - vars.yml
+    roles:
+        - utils
+        - user
+        - mysql
+        - php
+        - nginx
+...
